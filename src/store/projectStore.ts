@@ -20,6 +20,7 @@ interface ProjectState {
   fetchProjectTasks: (projectId: string) => Promise<void>
   createProject: (project: Omit<Project, 'id' | 'created_at' | 'updated_at'>) => Promise<Project>
   uploadDocument: (file: File, projectId: string) => Promise<Document>
+  initializeUserData: () => Promise<void>
 }
 
 export const useProjectStore = create<ProjectState>((set, get) => ({
@@ -33,18 +34,40 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     set({ currentProject: project })
   },
 
+  initializeUserData: async () => {
+    try {
+      // Call the function to add user to sample projects
+      const { error } = await supabase.rpc('add_user_to_sample_projects')
+      if (error) {
+        console.error('Error initializing user data:', error)
+      }
+    } catch (error) {
+      console.error('Error calling initialization function:', error)
+    }
+  },
+
   fetchProjects: async () => {
     set({ loading: true })
     try {
+      // First, try to initialize user data
+      await get().initializeUserData()
+      
+      // Then fetch projects
       const { data, error } = await supabase
         .from('projects')
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase error:', error)
+        throw error
+      }
+      
       set({ projects: data || [] })
     } catch (error) {
       console.error('Error fetching projects:', error)
+      // Set empty array on error to prevent infinite loading
+      set({ projects: [] })
     } finally {
       set({ loading: false })
     }
@@ -62,6 +85,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       set({ documents: data || [] })
     } catch (error) {
       console.error('Error fetching documents:', error)
+      set({ documents: [] })
     }
   },
 
@@ -77,56 +101,80 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       set({ tasks: data || [] })
     } catch (error) {
       console.error('Error fetching tasks:', error)
+      set({ tasks: [] })
     }
   },
 
   createProject: async (projectData) => {
-    const { data, error } = await supabase
-      .from('projects')
-      .insert(projectData)
-      .select()
-      .single()
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .insert(projectData)
+        .select()
+        .single()
 
-    if (error) throw error
-    
-    const { projects } = get()
-    set({ projects: [data, ...projects] })
-    
-    return data
+      if (error) throw error
+      
+      // Add the user as project owner
+      await supabase
+        .from('project_members')
+        .insert({
+          project_id: data.id,
+          user_id: projectData.owner_id,
+          role: 'owner'
+        })
+      
+      const { projects } = get()
+      set({ projects: [data, ...projects] })
+      
+      return data
+    } catch (error) {
+      console.error('Error creating project:', error)
+      throw error
+    }
   },
 
   uploadDocument: async (file: File, projectId: string) => {
-    // Upload file to Supabase Storage
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${Date.now()}.${fileExt}`
-    const filePath = `${projectId}/${fileName}`
+    try {
+      // Upload file to Supabase Storage
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}.${fileExt}`
+      const filePath = `${projectId}/${fileName}`
 
-    const { error: uploadError } = await supabase.storage
-      .from('documents')
-      .upload(filePath, file)
+      const { error: uploadError } = await supabase.storage
+        .from('documents')
+        .upload(filePath, file)
 
-    if (uploadError) throw uploadError
+      if (uploadError) throw uploadError
 
-    // Create document record
-    const { data, error } = await supabase
-      .from('documents')
-      .insert({
-        project_id: projectId,
-        name: file.name,
-        file_path: filePath,
-        file_size: file.size,
-        mime_type: file.type,
-        uploaded_by: (await supabase.auth.getUser()).data.user?.id || '',
-        metadata: {}
-      })
-      .select()
-      .single()
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('User not authenticated')
 
-    if (error) throw error
+      // Create document record
+      const { data, error } = await supabase
+        .from('documents')
+        .insert({
+          project_id: projectId,
+          name: file.name,
+          file_path: filePath,
+          file_size: file.size,
+          mime_type: file.type,
+          uploaded_by: user.id,
+          metadata: {}
+        })
+        .select()
+        .single()
 
-    const { documents } = get()
-    set({ documents: [data, ...documents] })
+      if (error) throw error
 
-    return data
+      const { documents } = get()
+      set({ documents: [data, ...documents] })
+
+      return data
+    } catch (error) {
+      console.error('Error uploading document:', error)
+      throw error
+    }
   },
 }))

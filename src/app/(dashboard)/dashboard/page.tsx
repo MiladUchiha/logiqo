@@ -23,7 +23,10 @@ export default function DashboardPage() {
     }
 
     if (user) {
-      fetchProjects()
+      // Fetch projects when user is available
+      fetchProjects().catch(error => {
+        console.error('Failed to fetch projects:', error)
+      })
     }
   }, [user, authLoading, fetchProjects, router])
 
@@ -57,7 +60,7 @@ export default function DashboardPage() {
           <div className={styles.headerContent}>
             <div className={styles.headerInfo}>
               <h1 className={styles.title}>
-                Welcome back, {user.user_metadata?.full_name || 'User'}
+                Welcome back, {user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'}
               </h1>
               <p className={styles.subtitle}>
                 Manage your construction projects with AI-powered insights
@@ -96,7 +99,9 @@ export default function DashboardPage() {
                   <FileText size={24} />
                 </div>
                 <div className={styles.statContent}>
-                  <div className={styles.statValue}>24</div>
+                  <div className={styles.statValue}>
+                    {projects.reduce((total, project) => total + (project.metadata?.documentCount || 0), 0)}
+                  </div>
                   <div className={styles.statLabel}>Documents</div>
                 </div>
               </div>
@@ -108,7 +113,9 @@ export default function DashboardPage() {
                   <Users size={24} />
                 </div>
                 <div className={styles.statContent}>
-                  <div className={styles.statValue}>12</div>
+                  <div className={styles.statValue}>
+                    {projects.reduce((total, project) => total + (project.metadata?.teamCount || 1), 0)}
+                  </div>
                   <div className={styles.statLabel}>Team Members</div>
                 </div>
               </div>
@@ -120,7 +127,12 @@ export default function DashboardPage() {
                   <BarChart3 size={24} />
                 </div>
                 <div className={styles.statContent}>
-                  <div className={styles.statValue}>85%</div>
+                  <div className={styles.statValue}>
+                    {projects.length > 0 
+                      ? Math.round(projects.reduce((total, project) => total + (project.metadata?.progress || 0), 0) / projects.length)
+                      : 0
+                    }%
+                  </div>
                   <div className={styles.statLabel}>Avg Progress</div>
                 </div>
               </div>
@@ -133,7 +145,7 @@ export default function DashboardPage() {
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>Recent Projects</h2>
-                <Button variant="secondary" size="small">
+                <Button variant="secondary" size="small" onClick={() => router.push('/projects')}>
                   View All
                 </Button>
               </div>
@@ -152,7 +164,14 @@ export default function DashboardPage() {
                         start_date: null,
                         end_date: null,
                         budget: null,
-                        owner_id: ''
+                        owner_id: '',
+                        address: null,
+                        client_name: null,
+                        client_email: null,
+                        client_phone: null,
+                        metadata: {},
+                        created_at: '',
+                        updated_at: ''
                       }}
                       loading={true}
                     />

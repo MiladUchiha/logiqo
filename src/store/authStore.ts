@@ -38,6 +38,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     })
 
     if (error) throw error
+    
+    // If user is created, also create user profile
+    if (data.user) {
+      const { error: profileError } = await supabase
+        .from('users')
+        .insert({
+          id: data.user.id,
+          email: data.user.email!,
+          full_name: fullName,
+          role: role as any
+        })
+      
+      if (profileError) {
+        console.error('Error creating user profile:', profileError)
+      }
+    }
+    
     set({ user: data.user })
   },
 
@@ -52,8 +69,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { data: { session } } = await supabase.auth.getSession()
       set({ user: session?.user || null, loading: false })
 
-      supabase.auth.onAuthStateChange((event, session) => {
+      supabase.auth.onAuthStateChange(async (event, session) => {
         set({ user: session?.user || null, loading: false })
+        
+        // If user just signed in, ensure their profile exists
+        if (event === 'SIGNED_IN' && session?.user) {
+          const { error } = await supabase
+            .from('users')
+            .upsert({
+              id: session.user.id,
+              email: session.user.email!,
+              full_name: session.user.user_metadata?.full_name || null,
+              role: session.user.user_metadata?.role || 'team_member'
+            })
+          
+          if (error) {
+            console.error('Error upserting user profile:', error)
+          }
+        }
       })
     } catch (error) {
       console.error('Auth initialization error:', error)
