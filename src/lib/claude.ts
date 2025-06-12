@@ -1,42 +1,31 @@
-import Anthropic from '@anthropic-ai/sdk'
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY, dangerouslyAllowBrowser: true
-})
-
 export class DocumentChatService {
   async processQuery(query: string, projectId: string, documentContext?: string) {
     try {
-      const systemPrompt = `You are ConstructFlow AI, an expert construction project assistant. You help project managers, foremen, and construction teams understand their project documents and make informed decisions.
-
-${documentContext ? `Context from project documents:\n${documentContext}\n` : ''}
-
-Guidelines:
-- Provide clear, actionable answers about construction projects
-- Reference specific document sections when available
-- Highlight safety considerations when relevant
-- Suggest next steps or follow-up actions
-- Use construction industry terminology appropriately
-- If you're unsure about something, say so and suggest consulting with experts`
-
-      const response = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 1000,
-        temperature: 0.1,
-        system: systemPrompt,
-        messages: [
-          {
-            role: "user",
-            content: query
-          }
-        ]
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          projectId,
+          documentContext
+        })
       })
 
-      return response.content[0].type === 'text' 
-        ? response.content[0].text 
-        : "I couldn't process your request. Please try again."
+      if (!response.ok) {
+        throw new Error('Failed to get response from AI')
+      }
+
+      const data = await response.json()
+      
+      if (data.error) {
+        throw new Error(data.error)
+      }
+
+      return data.response
     } catch (error) {
-      console.error('Claude API error:', error)
+      console.error('Chat service error:', error)
       throw new Error('Failed to process your question. Please try again.')
     }
   }
@@ -58,21 +47,28 @@ Please provide:
 
 Format your response in a clear, structured way.`
 
-      const response = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 1500,
-        temperature: 0.2,
-        messages: [
-          {
-            role: "user",
-            content: prompt
-          }
-        ]
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: prompt,
+          projectId: 'analysis'
+        })
       })
 
-      return response.content[0].type === 'text' 
-        ? response.content[0].text 
-        : "Could not analyze document."
+      if (!response.ok) {
+        throw new Error('Failed to analyze document')
+      }
+
+      const data = await response.json()
+      
+      if (data.error) {
+        throw new Error(data.error)
+      }
+
+      return data.response
     } catch (error) {
       console.error('Document analysis error:', error)
       throw new Error('Failed to analyze document.')
@@ -96,21 +92,28 @@ Provide:
 3. Optimization recommendations
 4. Next steps suggestions`
 
-      const response = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 1200,
-        temperature: 0.3,
-        messages: [
-          {
-            role: "user",
-            content: prompt
-          }
-        ]
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: prompt,
+          projectId: projectData.id || 'insights'
+        })
       })
 
-      return response.content[0].type === 'text' 
-        ? response.content[0].text 
-        : "Could not generate insights."
+      if (!response.ok) {
+        throw new Error('Failed to generate insights')
+      }
+
+      const data = await response.json()
+      
+      if (data.error) {
+        throw new Error(data.error)
+      }
+
+      return data.response
     } catch (error) {
       console.error('Project insights error:', error)
       throw new Error('Failed to generate project insights.')
