@@ -1,0 +1,437 @@
+/* Interface Showcase Section */
+.showcase {
+  background: var(--color-background);
+  padding: var(--space-3xl) 0;
+  position: relative;
+  /* min-height: 400vh; GSAP will manage scroll length via pinning */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-xl);
+  position: relative;
+  min-height: 100vh; /* Ensure container takes at least viewport height for pinning */
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative; /* Keep header visible during pin */
+  z-index: 5; /* Ensure header is above cards initially if overlapping */
+}
+
+.title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: var(--space-xl);
+  letter-spacing: -0.02em;
+}
+
+.titlePrimary {
+  color: var(--color-text-primary);
+  display: block;
+  margin-bottom: 0.2em;
+}
+
+.titleSecondary {
+  color: var(--color-accent);
+  display: block;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Cards Container */
+.cardsContainer {
+  position: relative; /* Changed from sticky to relative for GSAP control */
+  height: 100vh; /* Ensure it has height for pinning and card positioning */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* top: 0; Removed as GSAP will handle positioning within the pinned section */
+  overflow: hidden; /* Optional: hide parts of cards outside the container during transition */
+}
+
+.card {
+  position: absolute; /* GSAP will set top/left/xPercent/yPercent */
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+  border-radius: var(--radius-lg); /* Adding rounded corners */
+  background-color: var(--color-surface); /* Give cards a background */
+  padding: var(--space-xl); /* Add some padding to the card */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Add a subtle shadow */
+  /* opacity: 0; GSAP handles this */
+  /* transform: translate(-50%, -50%) translateY(20px); GSAP handles this */
+  /* transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); GSAP handles this */
+  /* pointer-events: none; GSAP handles this */
+}
+
+/* .card.active { // Removed as GSAP directly controls active-like state
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+  pointer-events: auto;
+} */
+
+/* Card Content */
+.cardContent {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: flex-start;
+}
+
+.cardNumber {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0.6;
+  letter-spacing: -0.02em;
+}
+
+.cardInfo {
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.cardDescription {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-xl);
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: 14px;
+  color: var(--color-text-tertiary);
+}
+
+.featureDot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Mockup Container */
+.mockupContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.mockup {
+  width: 450px;
+  height: 550px;
+  background: var(--color-surface-elevated);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
+  /* transform: rotateY(-5deg) rotateX(2deg); GSAP could handle this if desired for active card */
+  /* transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); */
+}
+
+/* .card.active .mockup { // Removed
+  transform: rotateY(0deg) rotateX(0deg);
+} */
+
+/* Mockup Header */
+.mockupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.mockupControls {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.mockupControls span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-border);
+}
+
+.mockupControls span:nth-child(1) {
+  background: #FF5F57;
+}
+
+.mockupControls span:nth-child(2) {
+  background: #FFBD2E;
+}
+
+.mockupControls span:nth-child(3) {
+  background: #28CA42;
+}
+
+.mockupTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mockupIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-accent);
+}
+
+.mockupUrl {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  background: var(--color-surface-elevated);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Mockup Content */
+.mockupContent {
+  height: calc(100% - 60px); /* Assuming mockupHeader height is fixed */
+  display: flex;
+}
+
+.mockupNav {
+  width: 60px;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border-subtle);
+  padding: var(--space-lg) var(--space-sm);
+}
+
+.navItems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.navItem {
+  width: 32px;
+  height: 32px;
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+  opacity: 0.6;
+}
+
+.navItem:first-child {
+  background: var(--color-accent);
+  opacity: 1;
+}
+
+.mockupMain {
+  flex: 1;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.mockupTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+
+.mockupTopBar h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.mockupButton {
+  background: var(--color-accent);
+  color: var(--color-background);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mockupArea {
+  flex: 1;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  transition: all 0.4s ease; /* This transition could be for internal elements if needed */
+  position: relative;
+  overflow: hidden;
+}
+
+.mockupArea::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 0.3;
+  border-radius: inherit;
+}
+
+.mockupAreaIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-background);
+  opacity: 0.8;
+  z-index: 1;
+  position: relative;
+}
+
+.mockupAreaText {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-background);
+  text-align: center;
+  z-index: 1;
+  position: relative;
+  letter-spacing: 0.05em;
+}
+
+/* Progress Indicator - Removed as per previous changes */
+/* .progressIndicator {
+  position: fixed;
+  right: var(--space-xl);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  z-index: 10;
+}
+
+.progressDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.progressDot.activeDot {
+  background: var(--color-accent);
+  transform: scale(1.5);
+  box-shadow: 0 0 12px var(--color-accent);
+} */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .showcase {
+    /* min-height: 300vh; GSAP manages scroll */
+  }
+
+  .container {
+    padding: 0 var(--space-lg); /* Adjusted padding for smaller screens */
+  }
+
+  .card {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl); /* Adjusted gap for smaller cards */
+    text-align: center;
+    max-width: 90%;
+    padding: var(--space-lg); /* Adjusted padding for smaller cards */
+  }
+
+  .cardContent {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cardNumber {
+    font-size: 2rem;
+  }
+
+  .cardTitle {
+    font-size: 1.5rem;
+  }
+
+  .mockup {
+    width: 100%; /* Make mockup responsive */
+    max-width: 320px; /* Max width for smaller mockups */
+    height: auto; /* Adjust height automatically */
+    min-height: 350px; /* Minimum height */
+    /* transform: none; GSAP handles transformations */
+  }
+  
+  .mockupContent {
+    height: calc(100% - 50px); /* Adjust if header height changes for mobile */
+  }
+
+  .mockupArea {
+    gap: var(--space-md);
+  }
+
+  .mockupAreaIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mockupAreaText {
+    font-size: 12px;
+  }
+
+  /* .progressIndicator { // Removed
+    right: var(--space-lg);
+  } */
+
+  .title {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+} 
