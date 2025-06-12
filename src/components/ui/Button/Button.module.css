@@ -1,0 +1,130 @@
+/* Enhanced Button Component */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+  letter-spacing: -0.005em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Primary variant */
+.primary {
+  background: var(--color-text-primary);
+  color: var(--color-background);
+  border-color: var(--color-text-primary);
+}
+
+.primary:hover {
+  background: var(--color-text-secondary);
+  border-color: var(--color-text-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(245, 252, 255, 0.2);
+}
+
+/* Secondary variant */
+.secondary {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: rgba(245, 252, 255, 0.15);
+}
+
+.secondary:hover {
+  border-color: rgba(245, 252, 255, 0.25);
+  background: rgba(67, 78, 83, 0.3);
+}
+
+/* Accent variant */
+.accent {
+  background: var(--color-accent);
+  color: var(--color-background);
+  border-color: var(--color-accent);
+}
+
+.accent:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(102, 232, 250, 0.3);
+}
+
+/* Danger variant */
+.danger {
+  background: #EF4444;
+  color: white;
+  border-color: #EF4444;
+}
+
+.danger:hover {
+  background: #DC2626;
+  border-color: #DC2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+/* Size variants */
+.small {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 12px;
+}
+
+.large {
+  padding: var(--space-lg) var(--space-xl);
+  font-size: 16px;
+}
+
+/* Loading state */
+.loading {
+  position: relative;
+  color: transparent;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Icon styling */
+.icon {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--transition-fast);
+}
+
+.button:hover .icon {
+  transform: scale(1.05);
+}
+
+/* Full width */
+.fullWidth {
+  width: 100%;
+}

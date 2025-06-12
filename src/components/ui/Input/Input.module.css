@@ -1,0 +1,141 @@
+/* Enhanced Input Component */
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(102, 232, 250, 0.1);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Error state */
+.error {
+  border-color: #EF4444;
+}
+
+.error:focus {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.errorMessage {
+  font-size: 12px;
+  color: #EF4444;
+  margin-top: var(--space-xs);
+}
+
+/* Success state */
+.success {
+  border-color: #10B981;
+}
+
+.success:focus {
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Icon support */
+.withIcon {
+  padding-left: calc(var(--space-lg) + 24px + var(--space-sm));
+}
+
+.icon {
+  position: absolute;
+  left: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+/* Textarea variant */
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+  padding: var(--space-md) var(--space-lg);
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* File input variant */
+.fileInput {
+  display: none;
+}
+
+.fileInputLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.fileInputLabel:hover {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+}
+
+.fileInputLabel.dragOver {
+  border-color: var(--color-accent);
+  background: rgba(102, 232, 250, 0.1);
+  color: var(--color-accent);
+}
+
+/* Size variants */
+.small {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 12px;
+}
+
+.large {
+  padding: var(--space-lg) var(--space-xl);
+  font-size: 16px;
+}
