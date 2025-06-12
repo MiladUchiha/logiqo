@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { MessageSquare, Send, FileText } from 'lucide-react'
-import { documentChatService } from '@/lib/openai'
+import { documentChatService } from '@/lib/claude'
 import styles from './DocumentChat.module.css'
 
 interface ChatMessage {
@@ -121,7 +121,7 @@ const DocumentChat: React.FC<DocumentChatProps> = ({
     <div className={`${styles.chatContainer} ${className}`}>
       <div className={styles.chatHeader}>
         <MessageSquare className={styles.chatIcon} />
-        <h3 className={styles.chatTitle}>AI Document Assistant</h3>
+        <h3 className={styles.chatTitle}>Claude AI Assistant</h3>
         <span className={styles.chatSubtitle}>
           {messages.length} messages
         </span>
@@ -131,7 +131,7 @@ const DocumentChat: React.FC<DocumentChatProps> = ({
         {messages.length === 0 ? (
           <div className={styles.emptyState}>
             <FileText className={styles.emptyIcon} />
-            <h4 className={styles.emptyTitle}>Ask about your project documents</h4>
+            <h4 className={styles.emptyTitle}>Ask Claude about your project documents</h4>
             <p className={styles.emptyDescription}>
               Upload documents and ask questions about specifications, timelines, 
               costs, safety requirements, and more.
@@ -173,7 +173,7 @@ const DocumentChat: React.FC<DocumentChatProps> = ({
                   <div className={styles.typingDot} />
                   <div className={styles.typingDot} />
                 </div>
-                <span>AI is thinking...</span>
+                <span>Claude is thinking...</span>
               </div>
             )}
           </>
@@ -186,7 +186,7 @@ const DocumentChat: React.FC<DocumentChatProps> = ({
           <textarea
             ref={textareaRef}
             className={styles.inputField}
-            placeholder="Ask about your project documents..."
+            placeholder="Ask Claude about your project documents..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
