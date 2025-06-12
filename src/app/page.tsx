@@ -3,11 +3,11 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
-import Hero from '@/components/Hero/Hero'
-import SystemTools from '@/components/SystemTools/SystemTools'
-import AICapabilities from '@/components/AICapabilities/AICapabilities'
-import InterfaceShowcase from '@/components/InterfaceShowcase/InterfaceShowcase'
-import Awards from '@/components/Awards/Awards'
+import Hero from '@/components/Hero'
+import SystemTools from '@/components/SystemTools'
+import AICapabilities from '@/components/AICapabilities'
+import InterfaceShowcase from '@/components/InterfaceShowcase'
+import Awards from '@/components/Awards'
 import MarketingNavbar from '@/components/MarketingNavbar/MarketingNavbar'
 
 export default function HomePage() {
