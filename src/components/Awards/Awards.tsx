@@ -20,7 +20,7 @@ const testimonials: Testimonial[] = [
   {
     id: 1,
     name: "Sarah Chen",
-    role: "Product Manager",
+    role: "Project Manager",
     company: "TechCorp",
     rating: 5,
     text: "This AI tool has revolutionized our workflow. The interface is intuitive and the results are consistently outstanding.",
@@ -74,7 +74,7 @@ const testimonials: Testimonial[] = [
   }
 ]
 
-export const Awards = () => {
+const Awards = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isManualChange, setIsManualChange] = useState(false)
   const cardsContainerRef = useRef<HTMLDivElement>(null)
@@ -439,3 +439,5 @@ export const Awards = () => {
     </section>
   )
 }
+
+export default Awards
