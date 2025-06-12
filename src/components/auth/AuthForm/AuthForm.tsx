@@ -28,9 +28,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
 
   const roles = [
     { value: 'project_manager', label: 'Project Manager' },
-    { value: 'foreman', label: 'Foreman' },
-    { value: 'subcontractor', label: 'Subcontractor' },
-    { value: 'client', label: 'Client' }
+    { value: 'contractor', label: 'Contractor' },
+    { value: 'client', label: 'Client' },
+    { value: 'team_member', label: 'Team Member' }
   ]
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,11 +61,15 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
     }))
   }
 
+  const handleBackToHome = () => {
+    router.push('/')
+  }
+
   return (
     <div className={styles.authContainer}>
       <div className={styles.authCard}>
         <div className={styles.authHeader}>
-          <div className={styles.logo}>
+          <div className={styles.logo} onClick={handleBackToHome}>
             <Building2 className={styles.logoIcon} />
             <h1 className={styles.logoText}>ConstructFlow</h1>
           </div>
@@ -165,11 +169,21 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}
           </span>
           <a
-            href={mode === 'signin' ? '/auth/signup' : '/auth/signin'}
+            href={mode === 'signin' ? '/signup' : '/signin'}
             className={styles.toggleButton}
           >
             {mode === 'signin' ? 'Sign Up' : 'Sign In'}
           </a>
+        </div>
+
+        <div className={styles.backToHome}>
+          <button
+            type="button"
+            onClick={handleBackToHome}
+            className={styles.backButton}
+          >
+            ← Back to Home
+          </button>
         </div>
       </div>
     </div>

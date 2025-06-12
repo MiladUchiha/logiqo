@@ -30,6 +30,15 @@
   justify-content: center;
   gap: var(--space-sm);
   margin-bottom: var(--space-xl);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+}
+
+.logo:hover {
+  border-color: rgba(245, 252, 255, 0.1);
 }
 
 .logoIcon {
@@ -66,11 +75,18 @@
   gap: var(--space-lg);
 }
 
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
 .roleSelector {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-sm);
-  margin-bottom: var(--space-md);
+  margin-top: var(--space-sm);
 }
 
 .roleOption {
@@ -117,6 +133,26 @@
 
 .toggleButton:hover {
   color: var(--color-accent-hover);
+}
+
+.backToHome {
+  text-align: center;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.backButton {
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.backButton:hover {
+  color: var(--color-text-secondary);
 }
 
 .errorMessage {
